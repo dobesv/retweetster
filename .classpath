@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-io.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-lang.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jcl-over-slf4j.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jsr107cache-1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jtwitter.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/log4j-over-slf4j.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/signpost-core-1.2.1.1.jar" sourcepath="war/WEB-INF/lib/kaeppler-signpost-1.2.1.1-0-gc403143.zip"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-jdk14.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>
