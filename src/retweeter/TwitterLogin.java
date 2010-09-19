@@ -44,6 +44,10 @@ public class TwitterLogin extends OAuthSignpostClient implements Serializable {
 	public TwitterLogin() {
 		super(CONSUMER_KEY, CONSUMER_SECRET, "http://retweetster.appspot.com/oauth-callback");
 	}
+	public TwitterLogin(User u) {
+		super(CONSUMER_KEY, CONSUMER_SECRET, u.getUserOAuthToken(), u.getUserOAuthSecret());
+	}
+
 	public String getToken() {
 		return getAccessToken()[0];
 	}

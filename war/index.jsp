@@ -34,20 +34,16 @@
 			<%
 		} else { %>
     <p>
-    	Logged into Twitter account for <a href="http://twitter.com/<%= user.getScreenName() %>">@<%= user.getScreenName() %></a>a>.  <a href="/setup?changeAccount=true">change account</a>
+    	Welcome <a target="twitter" href="http://twitter.com/<%= user.getScreenName() %>">@<%= user.getScreenName() %></a>!  (<a href="/setup?changeAccount=true">change account</a>)
     </p>
     <form action="/setup" method="post">
     	Enter the twitter user names you wish to monitor:<br/>
-    	<textarea id="accountsToWatch" name="accountsToWatch" rows="5" cols="30">
-    	<%=StringUtils.join(user.getAccountsToWatch(), "\n") %>
-    	</textarea><br/>
+    	<textarea id="accountsToWatch" name="accountsToWatch" rows="5" cols="30">@<%=StringUtils.join(user.getAccountsToWatch(), "\n@")%></textarea><br/>
     	
     	Enter the hash tags to look for:<br/>
-    	<textarea id="hashTagsToWatch" name="hashTagsToWatch" rows="5" cols="30">
-    	<%=StringUtils.join(user.getHashTagsToWatch(), "\n") %>
-    	</textarea><br/>
+    	<textarea id="hashTagsToWatch" name="hashTagsToWatch" rows="5" cols="30">#<%=StringUtils.join(user.getHashTagsToWatch(), "\n#")%></textarea><br/>
     	
-    	<input type="submit"/> <br/>
+    	<button type="submit">Save</button> <br/>
     </form>
     <% } 
     } finally { pm.close(); }%>

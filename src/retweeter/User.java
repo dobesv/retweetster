@@ -2,7 +2,9 @@ package retweeter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -10,6 +12,8 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import org.apache.commons.lang.ObjectUtils;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -35,12 +39,16 @@ public class User implements Serializable {
 	
 	@Persistent
 	String screenName;
+
+	@Persistent
+	Map<String,Long> lastStatusIdMap; // map of search query to tweet ID
 	
 	public User() {
 	}
 	public User(String screenName) {
 		accountsToWatch = new ArrayList<String>();
 		hashTagsToWatch = new ArrayList<String>();
+		lastStatusIdMap = new HashMap<String,Long>();
 		this.screenName = screenName;
 	}
 	
@@ -104,5 +112,21 @@ public class User implements Serializable {
 	}
 	public String getScreenName() {
 		return screenName;
+	}
+	public Map<String, Long> getLastStatusIdMap() {
+		return lastStatusIdMap;
+	}
+	public void setLastStatusIdMap(Map<String, Long> lastStatusIdMap) {
+		this.lastStatusIdMap = lastStatusIdMap;
+	}
+	public Long getLastStatusId(String query) {
+		if(lastStatusIdMap == null) return null; 
+			lastStatusIdMap = new HashMap<String, Long>();
+		return lastStatusIdMap.get(query);
+	}
+	public void setLastStatusId(String query, Long statusId) {
+		if(lastStatusIdMap == null)
+			lastStatusIdMap = new HashMap<String, Long>();
+		lastStatusIdMap.put(query, statusId); 		
 	}
 }
