@@ -40,7 +40,7 @@ public class User implements Serializable {
 	@Persistent
 	String screenName;
 
-	@Persistent
+	@Persistent(serialized="true")
 	Map<String,Long> lastStatusIdMap; // map of search query to tweet ID
 	
 	public User() {

@@ -30,9 +30,6 @@ public class CheckForUpdates extends HttpServlet {
 		// 2. Keep the screen name up-to-date for each user in case they changed it in twitter
 		// 3. Do searches for things to re-tweet.
 		
-		resp.setContentType("text/plain");
-		resp.getWriter().println("Hello, world");
-		
 		PersistenceManager pm = DB.getPersistenceManager();
 		try {
 			Extent<User> extent = pm.getExtent(User.class, false);
@@ -62,7 +59,8 @@ public class CheckForUpdates extends HttpServlet {
 								// If the user put multiple hashtags that we are watching, only retweet the status once
 								if(!retweetedAlready.add(status.getId())) {
 									// Re-tweet it!
-									t.retweet(status);
+									Status retweet = t.retweet(status);
+									logger.info(u.getScreenName()+": RT @"+u.getScreenName()+" "+status+"  - http://twitter.com/"+u.getScreenName()+"/statuses/"+retweet.getId());
 								}
 								
 								// Don't update the saved last status unless the retweet is successful. 
