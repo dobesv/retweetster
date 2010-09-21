@@ -42,10 +42,10 @@
     	Welcome <a target="twitter" href="http://twitter.com/<%= user.getScreenName() %>">@<%= user.getScreenName() %></a>!  (<a href="/setup?changeAccount=true">change account</a>)
     </p>
     <form action="/setup" method="post">
-    	Enter the twitter user names you wish to monitor:<br/>
+    	Enter the twitter user names OR <span title="Specify a list like You/retweetster with the people to monitor everyone on that list">lists</apsn> you wish to monitor:<br/>
     	<textarea id="accountsToWatch" name="accountsToWatch" rows="5" cols="30"><%=StringUtils.join(user.getAccountsToWatch(), "\n")%></textarea><br/>
     	
-    	Enter the hash tags to look for:<br/>
+    	Enter the #hashTags or keywords to look for:<br/>
     	<textarea id="hashTagsToWatch" name="hashTagsToWatch" rows="5" cols="30"><%=StringUtils.join(user.getHashTagsToWatch(), "\n")%></textarea><br/>
     	
     	<button type="submit">Save</button> <br/>

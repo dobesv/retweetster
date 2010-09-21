@@ -33,5 +33,9 @@ public class Tests {
 		assertEquals("bar", "\r\nfoo\r\nbar\r\nbaz".trim().split("\\W+")[1]);
 		assertEquals("baz", "\r\nfoo\r\nbar\r\nbaz".trim().split("\\W+")[2]);
 		assertEquals(3, "\r\nfoo\r\nbar\r\nbaz\r\n\t".trim().split("\\W+").length);
+		
+		assertEquals("foo/bar", "foo/bar buzz".split("[^\\w/]+")[0]);
+		assertEquals("buzz", "foo/bar buzz".split("[^\\w/]+")[1]);
+		
 	}
 }

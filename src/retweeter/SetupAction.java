@@ -49,14 +49,14 @@ public class SetupAction extends HttpServlet {
 	
 	private void maybeUpdateHashTagsToWatch(User user, String hashTagsToWatch) {
 		if(hashTagsToWatch != null) {
-			List<String> asList = Arrays.asList(hashTagsToWatch.trim().split("\\W+"));
+			List<String> asList = Arrays.asList(hashTagsToWatch.trim().split("[^\\w/#:]+"));
 			user.setHashTagsToWatch(asList);
 		}
 	}
 
 	private void maybeUpdateAccountsToWatch(User user, String accountsToWatch) {
 		if(accountsToWatch != null) {
-			List<String> asList = Arrays.asList(accountsToWatch.trim().split("\\W+"));
+			List<String> asList = Arrays.asList(accountsToWatch.trim().split("[^\\w/]+"));
 			user.setAccountsToWatch(asList);
 		}
 	}
