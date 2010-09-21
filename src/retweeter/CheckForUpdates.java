@@ -55,9 +55,10 @@ public class CheckForUpdates extends HttpServlet {
 							Long lastStatusId = u.getLastStatusId(query);
 							t.setSinceId(lastStatusId);
 							t.setMaxResults(5); // Don't re-tweet more than 5 for a given combination
+							logger.info(u.getScreenName()+": searching for '"+query+"' since ID "+lastStatusId);
 							for(Status status : t.search(query, null, 5)) {
 								// If the user put multiple hashtags that we are watching, only retweet the status once
-								if(!retweetedAlready.add(status.getId())) {
+								if(retweetedAlready.add(status.getId())) {
 									// Re-tweet it!
 									Status retweet = t.retweet(status);
 									logger.info(u.getScreenName()+": RT @"+u.getScreenName()+" "+status+"  - http://twitter.com/"+u.getScreenName()+"/statuses/"+retweet.getId());
@@ -70,15 +71,17 @@ public class CheckForUpdates extends HttpServlet {
 							}
 						}
 					}
+					logger.info("Successfully processed searches for @"+u.getScreenName());
+				} catch(RateLimit rateLimit) {
+					logger.warn("Hit rate limit when looking for tweets for "+u.getScreenName()+"; have to try again later.");
 				} catch(E401 authError) {
-					logger.warn("Authentication failed for "+u.getScreenName()+" - user with have to re-authenticate to active the service again.");
+					logger.warn("Authentication failed for "+u.getScreenName()+" - user with have to re-authenticate to activate the service again.");
 					u.setUserOAuthSecret(null);
 					u.setUserOAuthToken(null);
-				} catch(RateLimit rateLimit) {
-					logger.error("Hit rate limit when looking for tweets for "+u.getScreenName()+" maybe they have too many users/hashtags to watch!");
 				} catch(TwitterException te) {
 					logger.error("Error doing re-tweets for "+u.getScreenName(), te);
 				}
+				logger.info("Successfully processed all accounts");
 			}
 		} finally {
 			pm.close();

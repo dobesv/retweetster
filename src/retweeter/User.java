@@ -13,8 +13,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.commons.lang.ObjectUtils;
-
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
@@ -41,14 +39,14 @@ public class User implements Serializable {
 	String screenName;
 
 	@Persistent(serialized="true")
-	Map<String,Long> lastStatusIdMap; // map of search query to tweet ID
+	List<String> lastStatusIdMap; // map of search query to tweet ID
 	
 	public User() {
 	}
 	public User(String screenName) {
 		accountsToWatch = new ArrayList<String>();
 		hashTagsToWatch = new ArrayList<String>();
-		lastStatusIdMap = new HashMap<String,Long>();
+		lastStatusIdMap = new ArrayList<String>();
 		this.screenName = screenName;
 	}
 	
@@ -113,20 +111,24 @@ public class User implements Serializable {
 	public String getScreenName() {
 		return screenName;
 	}
-	public Map<String, Long> getLastStatusIdMap() {
+	public List<String> getLastStatusIdMap() {
 		return lastStatusIdMap;
 	}
-	public void setLastStatusIdMap(Map<String, Long> lastStatusIdMap) {
+	public void setLastStatusIdMap(List<String> lastStatusIdMap) {
 		this.lastStatusIdMap = lastStatusIdMap;
 	}
 	public Long getLastStatusId(String query) {
-		if(lastStatusIdMap == null) return null; 
-			lastStatusIdMap = new HashMap<String, Long>();
-		return lastStatusIdMap.get(query);
+		if(lastStatusIdMap == null) return null;
+		String mapPrefix = query+"=>";
+		for(String s : lastStatusIdMap) {
+			if(s.startsWith(mapPrefix))
+				return new Long(s.substring(mapPrefix.length()));
+		}
+		return null;
 	}
 	public void setLastStatusId(String query, Long statusId) {
 		if(lastStatusIdMap == null)
-			lastStatusIdMap = new HashMap<String, Long>();
-		lastStatusIdMap.put(query, statusId); 		
+			lastStatusIdMap = new ArrayList<String>();
+		lastStatusIdMap.add(query+"=>"+statusId); 		
 	}
 }

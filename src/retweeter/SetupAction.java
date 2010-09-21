@@ -2,7 +2,9 @@ package retweeter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +23,7 @@ public class SetupAction extends HttpServlet {
 		Key userKey = (Key) req.getSession().getAttribute("user");
 		PersistenceManager pm = DB.getPersistenceManager();
 		try {
-			User user = userKey==null ? null : pm.getObjectById(User.class, userKey); 
+			User user = userKey==null ? null : pm.getObjectById(User.class, userKey);
 			if(user == null || req.getParameter("changeAccount") != null) {
 				TwitterLogin.requestLogin(req, resp);
 				return;
@@ -32,6 +34,8 @@ public class SetupAction extends HttpServlet {
 			
 			// Go back to the setup form
 			resp.sendRedirect("/");
+		} catch(JDOObjectNotFoundException notFound) {
+			TwitterLogin.requestLogin(req, resp);
 		} finally {
 			pm.close();
 		}
@@ -44,14 +48,16 @@ public class SetupAction extends HttpServlet {
 	}
 	
 	private void maybeUpdateHashTagsToWatch(User user, String hashTagsToWatch) {
-		if(hashTagsToWatch != null && !hashTagsToWatch.equals(StringUtils.join(user.getHashTagsToWatch(), ", "))) {
-			user.setHashTagsToWatch(Arrays.asList(hashTagsToWatch.split("\\W+")));
+		if(hashTagsToWatch != null) {
+			List<String> asList = Arrays.asList(hashTagsToWatch.trim().split("\\W+"));
+			user.setHashTagsToWatch(asList);
 		}
 	}
 
 	private void maybeUpdateAccountsToWatch(User user, String accountsToWatch) {
-		if(accountsToWatch != null && !accountsToWatch.equals(StringUtils.join(user.getAccountsToWatch(), ", "))) {
-			user.setAccountsToWatch(Arrays.asList(accountsToWatch.split("\\W+")));
+		if(accountsToWatch != null) {
+			List<String> asList = Arrays.asList(accountsToWatch.trim().split("\\W+"));
+			user.setAccountsToWatch(asList);
 		}
 	}
 }

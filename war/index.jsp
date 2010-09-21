@@ -27,7 +27,12 @@
 	Key userKey = (Key) request.getSession().getAttribute("user");
 	PersistenceManager pm = DB.getPersistenceManager();
 	try {
-		User user = userKey==null ? null : pm.getObjectById(User.class, userKey); 
+		User user = null;
+		try {
+			if(userKey!=null) user = pm.getObjectById(User.class, userKey); 
+		} catch(Exception e) {
+			// Oh well... probably not in the DB any more.
+		}
 		if(user == null) {
 			%>
 			<a href="/setup">Click here to login to twitter and get started!</a>
@@ -38,10 +43,10 @@
     </p>
     <form action="/setup" method="post">
     	Enter the twitter user names you wish to monitor:<br/>
-    	<textarea id="accountsToWatch" name="accountsToWatch" rows="5" cols="30">@<%=StringUtils.join(user.getAccountsToWatch(), "\n@")%></textarea><br/>
+    	<textarea id="accountsToWatch" name="accountsToWatch" rows="5" cols="30"><%=StringUtils.join(user.getAccountsToWatch(), "\n")%></textarea><br/>
     	
     	Enter the hash tags to look for:<br/>
-    	<textarea id="hashTagsToWatch" name="hashTagsToWatch" rows="5" cols="30">#<%=StringUtils.join(user.getHashTagsToWatch(), "\n#")%></textarea><br/>
+    	<textarea id="hashTagsToWatch" name="hashTagsToWatch" rows="5" cols="30"><%=StringUtils.join(user.getHashTagsToWatch(), "\n")%></textarea><br/>
     	
     	<button type="submit">Save</button> <br/>
     </form>

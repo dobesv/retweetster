@@ -1,6 +1,6 @@
 package retweeter;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -24,5 +24,14 @@ public class Tests {
 		TwitterLogin client2 = (TwitterLogin) ois.readObject();
 		assertNotNull(client2);
 		client2.setAuthorizationCode("ABC");
+	}
+	
+	@Test
+	public void testSplit() throws Exception {
+		
+		assertEquals("foo", "\r\nfoo\r\nbar\r\nbaz".trim().split("\\W+")[0]);
+		assertEquals("bar", "\r\nfoo\r\nbar\r\nbaz".trim().split("\\W+")[1]);
+		assertEquals("baz", "\r\nfoo\r\nbar\r\nbaz".trim().split("\\W+")[2]);
+		assertEquals(3, "\r\nfoo\r\nbar\r\nbaz\r\n\t".trim().split("\\W+").length);
 	}
 }

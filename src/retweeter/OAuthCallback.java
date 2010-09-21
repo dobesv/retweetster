@@ -2,6 +2,7 @@ package retweeter;
 
 import java.io.IOException;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,13 +30,18 @@ public class OAuthCallback extends HttpServlet {
 		Twitter.User twitterUser = account.verifyCredentials();
 		
 		// Get their screen name and look them up that way
-		User user = User.getOrCreateWithScreenName(DB.getPersistenceManager(), twitterUser.getScreenName());
-		user.setUserOAuthToken(w.getToken());
-		user.setUserOAuthSecret(w.getTokenSecret());
-
-		HttpSession session = req.getSession();
-		session.setAttribute("user", user.getKey());
-		
-		resp.sendRedirect("/");
+		PersistenceManager pm = DB.getPersistenceManager();
+		try {
+			User user = User.getOrCreateWithScreenName(pm, twitterUser.getScreenName());
+			user.setUserOAuthToken(w.getToken());
+			user.setUserOAuthSecret(w.getTokenSecret());
+	
+			HttpSession session = req.getSession();
+			session.setAttribute("user", user.getKey());
+			
+			resp.sendRedirect("/");
+		} finally {
+			pm.close();
+		}
 	}
 }
